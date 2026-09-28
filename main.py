@@ -7,11 +7,28 @@ from PIL import Image, ImageTk
 from math import *
 import numpy as np
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def resource_path(filename):
+    """
+    Получает путь к файлу, расположенному рядом с программой.
+    Работает при запуске .py и при сборке в .exe через PyInstaller.
+    """
+    if getattr(sys, "frozen", False):
+        base_path = getattr(
+            sys,
+            "_MEIPASS",
+            os.path.dirname(sys.executable)
+        )
+    else:
+        base_path = BASE_DIR
+
+    return os.path.join(base_path, filename)
 root = Tk()
 root.title("Integral2dDraw")
 root.geometry("650x250")
 
-img = Image.open("dxdy.png").resize((300, 100))
+img = Image.open(resource_path("dxdy.png")).resize((300, 100))
 pimg = ImageTk.PhotoImage(img)
 size = img.size
 dx = []
@@ -293,10 +310,11 @@ dxmin2.grid(row=3, column=8)
 button = ttk.Button(text="Построить Интеграл Dy Dx", command=clickdydx)
 button.grid(row=8, column=1)
 
-img1 = Image.open("dydx.png").resize((300, 100))
+img1 = Image.open(resource_path("dydx.png")).resize((300, 100))
 pimg1 = ImageTk.PhotoImage(img1)
-size1 = img.size
-frame = Canvas(width=size[0], height=size[1])
+size1 = img1.size
+
+frame = Canvas(width=size1[0], height=size1[1])
 frame.grid(row=1, column=6, columnspan=3)
 frame.create_image(0, 0, anchor="nw", image=pimg1)
 
